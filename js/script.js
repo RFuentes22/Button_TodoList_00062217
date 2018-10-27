@@ -1,61 +1,66 @@
- window.onload = init;
-   
- function init() {
-     let todoList = {
-         listHTML: document.getElementById("todoList"),
-         listTask: [],
-         add(task, priority = false) {
-             let element = document.createElement("li");
-             element.innerText = task;
-             /*element.addEventListener("click", () => {
+window.onload = init;
+
+function init() {
+    let todoList = {
+        listHTML: document.getElementById("todoList"),
+        listTask: [],
+        add(task, priority = false) {
+
+            let element = document.createElement("li");
+
+            let text = document.createTextNode(task);
+
+            let Button_element = document.createElement("button");
+            let B_delete = document.createTextNode("Delete");
+            Button_element.appendChild(B_delete);
+
+            let Button_element2 = document.createElement("button");
+            let B_Done = document.createTextNode("Done");
+            Button_element2.appendChild(B_Done);
+
+            element.appendChild(Button_element);
+            element.appendChild(Button_element2);
+            element.appendChild(text);
+
+            Button_element.addEventListener("click", function () {
                 let parent = element.parentNode;
-                if(parent){
+                if (parent) {
                     parent.removeChild(element);
                 }
-             });*/
-             element.addEventListener("click", function(){
-                console.log(this);
-                let parent = this.parentNode;
-                if(parent){
-                    parent.removeChild(this);
-                }
-             });
-            // Añadir un boton para marcar de finalizado
-            // Elmine de la lista
+            })
 
-             if (priority) {
-                 this.listTask.unshift({
-                     element,
-                     task
-                 });
-                 this.listHTML.insertBefore(element, this.listHTML.childNodes[0]);
-             } else {
-                 this.listTask.push({
-                     element,
-                     task
-                 });
-                 this.listHTML.appendChild(element);
-             }
-         }
-     }
-     let done = {
-        bdone: document.getElementById('done'),
+            Button_element2.addEventListener("click", function () {
+                element.style.textDecoration = "line-through";
+            });
 
+            if (priority) {
+                this.listTask.unshift({
+                    element,
+                    task
+                });
+                this.listHTML.insertBefore(element, this.listHTML.childNodes[0]);
+            } else {
+                this.listTask.push({
+                    element,
+                    task
+                });
+                this.listHTML.appendChild(element);
+            }
+        }
+    }
 
-     }
+    let form = document.managerTask;
+    form.addEventListener("submit", (evt) => {
+        evt.preventDefault();
+        let task = form.task.value;
 
-     let form = document.managerTask;
-     form.addEventListener("submit", (evt) => {
-         evt.preventDefault();
-         let task = form.task.value;
+        let validTask = /.{2,}/;
+        if (!validTask.test(task)) {
+            console.log("Ingrese una descripcion clara");
+            return false;
+        }
 
-         let validTask = /.{2,}/;
-         if (!validTask.test(task)) {
-             console.log("Ingrese una descripcion clara");
-             return false;
-         }
+        todoList.add(task, form.important.checked);
 
-         todoList.add(task, form.important.checked);
-
-     });
- }
+    });
+}
